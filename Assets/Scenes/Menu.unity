@@ -155,9 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e5707ce3b40164da784d909fc4c4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuInicial: {fileID: 1789355095}
-  menuCreadores: {fileID: 57475954}
-  menuPoderes: {fileID: 1119927860}
+  menuInitial: {fileID: 0}
+  menuCreators: {fileID: 0}
+  menuPowerUps: {fileID: 0}
 --- !u!114 &57475956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2495,9 +2495,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e5707ce3b40164da784d909fc4c4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuInicial: {fileID: 1789355095}
-  menuCreadores: {fileID: 57475954}
-  menuPoderes: {fileID: 1119927860}
+  menuInitial: {fileID: 0}
+  menuCreators: {fileID: 0}
+  menuPowerUps: {fileID: 0}
 --- !u!114 &1119927862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4827,9 +4827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e5707ce3b40164da784d909fc4c4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuInicial: {fileID: 1789355095}
-  menuCreadores: {fileID: 57475954}
-  menuPoderes: {fileID: 1119927860}
+  menuInitial: {fileID: 835476790}
+  menuCreators: {fileID: 57475954}
+  menuPowerUps: {fileID: 1328513155}
 --- !u!224 &1791039295 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6007234003412052295, guid: 9a9572c413cf2084a9bc222afda40e42, type: 3}

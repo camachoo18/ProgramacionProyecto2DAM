@@ -52,7 +52,7 @@ public class CameraFollow : MonoBehaviour
 
 
         //mainCamera.fieldOfView
-        //rb.velocity.magnitude es  Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.y * rb.velocity.y)
+        //Rb.velocity.magnitude es  Mathf.Sqrt(Rb.velocity.x * Rb.velocity.x + Rb.velocity.y * Rb.velocity.y)
         playerSpeed = rb.velocity.magnitude;
 
 

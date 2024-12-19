@@ -7,20 +7,17 @@ using UnityEngine.SceneManagement;
 
 public class autoJump : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public Rigidbody2D Rb;
     [SerializeField] GameObject[] JumpHB;
     [SerializeField] bool isGrounded = false;
-    [SerializeField] LayerMask groundLayer;
     [SerializeField] float distanceToGround;
-    [SerializeField] Transform[] groundCheckPoints;
+    [SerializeField] public Transform[] groundCheckPoints;
     float currentJumpPressTime;
     [SerializeField] int performedJumpCount;
     [SerializeField] int maxOnAirJumps = 2;
     [SerializeField] float jumpStrength = 10f;
     [SerializeField] float jumpInterval = 1f;
     private float jumpTimer;
-    LayerMask Player;
-    LayerMask Ground;
     public Stats Stats;
     [SerializeField] float upGravity = 1f;
     [SerializeField] float downGravity = 2f;
@@ -30,18 +27,14 @@ public class autoJump : MonoBehaviour
     [SerializeField] private ParticleSystem jumpParticles;
 
     float timeOnAir;
-    public void RestartWithDelay(float seconds)
-    {
-        StartCoroutine(AnimateDeath(seconds));
-    }
+    float currentJumpStrength;
 
     void Start()
     {
         performedJumpCount = 0;
-        rb = GetComponent<Rigidbody2D>();
+        Rb = GetComponent<Rigidbody2D>();
         jumpTimer = jumpInterval;
-        Player = LayerMask.NameToLayer("Player");
-        Ground = LayerMask.NameToLayer("Ground");
+        currentJumpStrength = jumpStrength; // Iniciar el salto con la fuerza inicial
     }
 
     void Update()
@@ -52,10 +45,9 @@ public class autoJump : MonoBehaviour
         {
             currentJumpPressTime = 0;
             performedJumpCount += 1;
-            rb.velocity = new Vector2(rb.velocity.x, Stats.jumpStenghtBS);
+            Rb.velocity = new Vector2(Rb.velocity.x, currentJumpStrength);
             jumpTimer = jumpInterval;
 
-        
             if (jumpParticles != null)
             {
                 jumpParticles.Play();
@@ -63,17 +55,17 @@ public class autoJump : MonoBehaviour
             StartCoroutine(SquashAnimation(0.2f, new Vector3(1.2f, 0.8f, 1f)));
         }
 
-        if (rb.velocity.y < yVelocityLowGravityThreshold && rb.velocity.y > -yVelocityLowGravityThreshold)
+        if (Rb.velocity.y < yVelocityLowGravityThreshold && Rb.velocity.y > -yVelocityLowGravityThreshold)
         {
-            rb.gravityScale = peakGravity;
+            Rb.gravityScale = peakGravity;
         }
-        else if (rb.velocity.y > 0)
+        else if (Rb.velocity.y > 0)
         {
-            rb.gravityScale = upGravity;
+            Rb.gravityScale = upGravity;
         }
         else
         {
-            rb.gravityScale = downGravity;
+            Rb.gravityScale = downGravity;
         }
 
         isGrounded = false;
@@ -82,15 +74,14 @@ public class autoJump : MonoBehaviour
             bool hit = Physics2D.Raycast(
                 groundCheckPoints[i].position,
                 Vector2.down,
-                distanceToGround,
-                groundLayer);
+                distanceToGround);
 
             if (hit)
             {
                 timeOnAir = 0;
                 isGrounded = true;
                 performedJumpCount = 0;
-                rb.gravityScale = upGravity;
+                Rb.gravityScale = upGravity;
                 break;
             }
         }
@@ -100,7 +91,46 @@ public class autoJump : MonoBehaviour
             timeOnAir += Time.deltaTime;
         }
 
-        Physics2D.IgnoreLayerCollision(Player, Ground, rb.velocity.y > 0);
+        // Ignorar colisión al subir con plataformas tipo A
+        foreach (Transform groundCheck in groundCheckPoints)
+        {
+            Collider2D hitCollider = Physics2D.OverlapCircle(groundCheck.position, 0.1f);
+            if (hitCollider != null && hitCollider.CompareTag("PlatformA") && Rb.velocity.y > 0)
+            {
+                Physics2D.IgnoreCollision(hitCollider, GetComponent<Collider2D>(), true);
+            }
+            else
+            {
+                Physics2D.IgnoreCollision(hitCollider, GetComponent<Collider2D>(), false);
+            }
+        }
+
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Ground"), Rb.velocity.y > 0);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {       // Si toca PlatformA, aumentara su fuerza de salto.
+        if (collision.gameObject.CompareTag("PlatformA"))
+        {
+            
+            if (!isGrounded && performedJumpCount > 0)
+            {
+                currentJumpStrength *= 2.1f;  // esto aumentara su salto.
+            }
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
+        } // Si toca PlatformB, rebota.
+        else if (collision.gameObject.CompareTag("PlatformB"))
+        {
+            
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -5f), ForceMode2D.Impulse);
+        }
+
+        // Restablece la fuerza del salto a su valor inicial cuando salta desde una plataforma tipo B
+        if (collision.gameObject.CompareTag("PlatformB"))
+        {
+            //se reinicia al dar el otro tipo.
+            currentJumpStrength = jumpStrength;
+        }
     }
 
     private IEnumerator SquashAnimation(float duration, Vector3 squashScale)
@@ -130,56 +160,12 @@ public class autoJump : MonoBehaviour
         transform.localScale = originalScale;
     }
 
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("JumpHB"))
-        {
-            Stats.jumpStenghtBS = Stats.jumpStenghtHB;
-            JumpHB[0].SetActive(false);
-
-            // Iniciar la animación de achatamiento
-            StartCoroutine(SquashAnimation(0.5f, new Vector3(1.2f, 0.8f, 1f)));
-
-            StartCoroutine(backToNormal(1f));
-        }
-
-        if (collision.gameObject.CompareTag("JumpHB1"))
-        {
-            Stats.jumpStenghtBS = Stats.jumpStenghtHB;
-
-            JumpHB[1].SetActive(false);
-            StartCoroutine(SquashAnimation(0.5f, new Vector3(1.2f, 0.8f, 1f)));
-            StartCoroutine(backToNormal(1f));
-        }
-
-        if (collision.gameObject.CompareTag("JumpHB2"))
-        {
-            Stats.jumpStenghtBS = Stats.jumpStenghtHB;
-
-            JumpHB[2].SetActive(false);
-            StartCoroutine(SquashAnimation(0.5f, new Vector3(1.2f, 0.8f, 1f)));
-            StartCoroutine(backToNormal(1f));
-        }
-
-        if (collision.gameObject.CompareTag("JumpHB3"))
-        {
-            Stats.jumpStenghtBS = Stats.jumpStenghtHB;
-
-            JumpHB[3].SetActive(false);
-            StartCoroutine(SquashAnimation(0.5f, new Vector3(1.2f, 0.8f, 1f)));
-            StartCoroutine(backToNormal(1f));
-        }
-        
-    }
-
-
-
     private IEnumerator backToNormal(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        Stats.jumpStenghtBS = 10f;  
+        Stats.jumpStenghtBS = 10f;
     }
+
     private IEnumerator AnimateDeath(float duration)
     {
         Vector3 startPos = transform.position;
@@ -196,18 +182,11 @@ public class autoJump : MonoBehaviour
             float curveY = Mathf.Sin(t * Mathf.PI) * -2f; // Movimiento vertical (curvado hacia abajo)
             currentPos.y += curveY;
 
-
             transform.position = currentPos;
-
-
-
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-
-
 
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);

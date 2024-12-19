@@ -13,6 +13,10 @@ TagManager:
   - invencible1
   - Background
   - FallBackground
+  - saltoHB
+  - Enemigo
+  - PlatformA
+  - PlatformB
   layers:
   - Default
   - TransparentFX
@@ -22,8 +26,8 @@ TagManager:
   - UI
   - Player
   - Enemy
-  - 
-  - 
+  - PlatformA
+  - PlatformB
   - 
   - 
   - 
