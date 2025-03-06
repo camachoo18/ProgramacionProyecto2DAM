@@ -23,8 +23,11 @@ public class autoJump : MonoBehaviour
     [SerializeField] float downGravity = 2f;
     [SerializeField] float peakGravity = 0.5f;
     [SerializeField] float yVelocityLowGravityThreshold = 0.1f;
+    [SerializeField] private bool isInvulnerable = false;
 
     [SerializeField] private ParticleSystem jumpParticles;
+
+   
 
     float timeOnAir;
     float currentJumpStrength;
@@ -39,6 +42,9 @@ public class autoJump : MonoBehaviour
 
     void Update()
     {
+       
+        
+
         jumpTimer -= Time.deltaTime;
 
         if (jumpTimer <= 0 && (isGrounded || performedJumpCount < maxOnAirJumps))
@@ -94,18 +100,42 @@ public class autoJump : MonoBehaviour
         // Ignorar colisión al subir con plataformas tipo A
         foreach (Transform groundCheck in groundCheckPoints)
         {
-            Collider2D hitCollider = Physics2D.OverlapCircle(groundCheck.position, 0.1f);
-            if (hitCollider != null && hitCollider.CompareTag("PlatformA") && Rb.velocity.y > 0)
+            Collider2D hitCollider = Physics2D.OverlapCircle(groundCheck.position, 0.2f);
+
+            if (hitCollider != null)
             {
-                Physics2D.IgnoreCollision(hitCollider, GetComponent<Collider2D>(), true);
-            }
-            else
-            {
-                Physics2D.IgnoreCollision(hitCollider, GetComponent<Collider2D>(), false);
+                if (hitCollider.CompareTag("PlatformA") && Rb.velocity.y > 0)
+                {
+                    Physics2D.IgnoreCollision(hitCollider, GetComponent<Collider2D>(), true);
+                }
+                else
+                {
+                    Physics2D.IgnoreCollision(hitCollider, GetComponent<Collider2D>(), false);
+                }
             }
         }
 
+        // Ignorar colisiones ascendentes para todas las plataformas del suelo
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Ground"), Rb.velocity.y > 0);
+
+         }
+        private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("invencible"))
+        {
+            StartCoroutine(ActivateInvulnerability(5f)); // Ejemplo: 5 segundos de invulnerabilidad
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private IEnumerator ActivateInvulnerability(float duration)
+    {
+        isInvulnerable = true;
+
+        // Opcional: Cambiar apariencia del jugador, por ejemplo, color o animación.
+        yield return new WaitForSeconds(duration);
+
+        isInvulnerable = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -132,6 +162,7 @@ public class autoJump : MonoBehaviour
             currentJumpStrength = jumpStrength;
         }
     }
+
 
     private IEnumerator SquashAnimation(float duration, Vector3 squashScale)
     {

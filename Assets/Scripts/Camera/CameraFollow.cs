@@ -34,7 +34,7 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+     void Update()
     {
         lookAhead = Vector3.SmoothDamp(
             lookAhead,

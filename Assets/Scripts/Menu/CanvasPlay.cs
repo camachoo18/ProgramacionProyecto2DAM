@@ -13,7 +13,7 @@ public class CanvasPlay : MonoBehaviour
     {
         menuCreators.SetActive(false);
         menuInitial.SetActive(true);
-        menuPowerUps.SetActive(false);
+        menuPowerUps.SetActive(true);
     }
     public void Play()
     {
@@ -41,7 +41,7 @@ public class CanvasPlay : MonoBehaviour
     {
         menuCreators.SetActive(false);
         menuInitial.SetActive(true);
-        menuPowerUps.SetActive(false);
+        menuPowerUps.SetActive(true);
     }
     public void Exit()
     {

@@ -155,9 +155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e5707ce3b40164da784d909fc4c4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuInitial: {fileID: 0}
-  menuCreators: {fileID: 0}
-  menuPowerUps: {fileID: 0}
+  menuInitial: {fileID: 1789355095}
+  menuCreators: {fileID: 57475954}
+  menuPowerUps: {fileID: 1328513155}
 --- !u!114 &57475956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 57475955}
         m_TargetAssemblyTypeName: CanvasPlay, Assembly-CSharp
-        m_MethodName: Volver
+        m_MethodName: Back
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1408,7 +1408,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1119927861}
         m_TargetAssemblyTypeName: CanvasPlay, Assembly-CSharp
-        m_MethodName: Volver
+        m_MethodName: Back
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2047,7 +2047,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1789355101}
         m_TargetAssemblyTypeName: CanvasPlay, Assembly-CSharp
-        m_MethodName: Jugar
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2482,7 +2482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1119927861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2495,9 +2495,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e5707ce3b40164da784d909fc4c4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuInitial: {fileID: 0}
-  menuCreators: {fileID: 0}
-  menuPowerUps: {fileID: 0}
+  menuInitial: {fileID: 1789355095}
+  menuCreators: {fileID: 57475954}
+  menuPowerUps: {fileID: 1119927860}
 --- !u!114 &1119927862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3067,7 +3067,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1789355101}
         m_TargetAssemblyTypeName: CanvasPlay, Assembly-CSharp
-        m_MethodName: Poderes
+        m_MethodName: PowerUps
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4172,7 +4172,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1789355101}
         m_TargetAssemblyTypeName: CanvasPlay, Assembly-CSharp
-        m_MethodName: Creditos
+        m_MethodName: Credits
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4827,7 +4827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e5707ce3b40164da784d909fc4c4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuInitial: {fileID: 835476790}
+  menuInitial: {fileID: 1789355095}
   menuCreators: {fileID: 57475954}
   menuPowerUps: {fileID: 1328513155}
 --- !u!224 &1791039295 stripped
